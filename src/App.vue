@@ -53,15 +53,22 @@
 
     <!-- ปุ่มสำหรับการส่งข้อความและเปิด browser-->
     <div class="button-group">
+      <input v-model="input" placeholder="enter your message" >
+      <button @click="sendMessage(input)" class="btn">Send Message</button>
+    </div>
+    <div class="button-group">
       <!-- <button v-if="isShowButton" @click="sendMessage" class="btn">Send Message</button> -->
-      <button @click="sendMessage('This message was send from LIFF!')" class="btn">Send Message</button>
       <button @click="openWindowModule" class="btn">Open Window</button>
+      <button @click="shareMessage" class="btn">Share via LINE</button>
     </div>
     <!-- ปุ่มสำหรับการแชร์และ แสกน qrcode-->
     <div class="button-group">
-      <button @click="shareMessage" class="btn">Share via LINE</button>
       <!-- <button v-if="isShowButton" @click="openQRCodeModule" class="btn">Scan QR</button> -->
       <button @click="openQRCodeModule" class="btn">Scan QR</button>
+      <button @click="closeWindow" class="btn">Close Window</button>
+    </div>
+    <div class="button-group">
+      <button @click="logout" class="btn">Log out</button>
     </div>
   </div>
 
@@ -70,6 +77,7 @@
 <script>
 import liff from "@line/liff";
 import OpenWindowModule from "@line/liff/open-window";
+const input = String;
 export default {
   beforeCreate() {
     liff
@@ -113,16 +121,17 @@ export default {
 
           const profile = await liff.getProfile();
           this.profile = profile;
+          // console.log('profile', profile);
           const friendShip = await liff.getFriendship()
           this.friendShip = friendShip.friendFlag
-          // console.log(friendShip);
+          // console.log('friendship', friendShip);
           // ดึงข้อมูลอีเมล
           const deIdToken = liff.getDecodedIDToken();
-          console.log(deIdToken);
+          console.log('deIdToken: ', deIdToken);
           this.email = deIdToken.email;
 
           const idToken = liff.getIDToken();
-          console.log(idToken);
+          console.log('idToken: ', idToken);
 
 
 
@@ -269,12 +278,31 @@ export default {
         console.error('Error sharing message:', error);
         alert('Failed to share message.');
       }
+    },
+
+    // closeWindow call
+    async closeWindow() {
+      if (!liff.isInClient()) {
+        window.alert(
+          "This button is unavailable as LIFF is currently being opened in an external browser.",
+        );
+      } else {
+        liff.closeWindow();
+      }
+    },
+
+    // log out
+    async logout() {
+      if (liff.isLoggedIn()) {
+        liff.logout();
+        window.location.reload();
+      }
     }
   },
 };
 
 // const context = liff.getContext();
-// console.log(context);
+// console.log('context: ', context);
 </script>
 
 <style scoped>
@@ -358,10 +386,9 @@ export default {
 }
 
 .button-group {
-  margin-top: 20px;
+  margin: 20px;
   display: flex;
-  justify-content: center;
-  gap: 20px;
+  justify-content: space-between;
 }
 
 .btn {

@@ -5,6 +5,6 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
   plugins: [vue()],
   server: {
-    allowedHosts: ['https://liff-demo-psi.vercel.app/'],
+    allowedHosts: ['liff-demo-psi.vercel.app'],
   }
 });
