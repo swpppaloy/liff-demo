@@ -127,11 +127,11 @@ export default {
           // console.log('friendship', friendShip);
           // ดึงข้อมูลอีเมล
           const deIdToken = liff.getDecodedIDToken();
-          console.log('deIdToken: ', deIdToken);
+          // console.log('deIdToken: ', deIdToken);
           this.email = deIdToken.email;
 
           const idToken = liff.getIDToken();
-          console.log('idToken: ', idToken);
+          // console.log('idToken: ', idToken);
 
 
 
