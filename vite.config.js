@@ -5,6 +5,6 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
   plugins: [vue()],
   server: {
-    allowedHosts: ['tuning-carroll-presenting-gathered.trycloudflare.com'],
+    allowedHosts: ['liff-demo-psi.vercel.app'],
   }
 });
